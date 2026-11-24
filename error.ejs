@@ -1,0 +1,24 @@
+<%- include("partials/header") %>
+
+<section class="error-shell">
+  <p class="error-code"><%= statusCode %></p>
+  <h1><%= message %></h1>
+  <p class="muted">
+    If this looks like a system error, note the status code and the steps, then tell the team.
+  </p>
+
+  <% if (typeof detail !== 'undefined' && detail) { %>
+    <pre class="error-detail"><%= detail %></pre>
+  <% } %>
+
+  <div class="form-actions">
+    <% if (currentUser) { %>
+      <a class="btn btn--primary" href="/">Back to overview</a>
+      <a class="btn" href="/items">Lost & found</a>
+    <% } else { %>
+      <a class="btn btn--primary" href="/login">Go to sign in</a>
+    <% } %>
+  </div>
+</section>
+
+<%- include("partials/footer") %>

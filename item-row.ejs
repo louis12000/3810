@@ -1,0 +1,39 @@
+<%
+  const rowStatus =
+    item.status === 'open' ? 'Open'
+    : item.status === 'claimed' ? 'Claim pending'
+    : 'Closed';
+  const shortId = String(item._id).slice(-6).toUpperCase();
+  const ownerName = item.owner && item.owner.name ? item.owner.name : null;
+%>
+<a class="row" href="/items/<%= item._id %>">
+  <span class="row-main">
+    <span class="thumb thumb--<%= item.type %>"><%= item.type === 'lost' ? 'LS' : 'LF' %></span>
+    <span class="row-info">
+      <span class="row-title"><%= item.title %></span>
+      <span class="row-meta">
+        ◈ <%= item.location || 'No location' %>
+        <% if (typeof showOwner !== 'undefined' && showOwner && ownerName) { %>
+          · Owner <%= ownerName %>
+        <% } %>
+      </span>
+      <span class="row-sub">
+        <span class="mono"><%= shortId %></span>
+        <span><%= formatDay(item.occurredAt) %></span>
+        <span><%= meta.categoryLabel[item.category] %></span>
+      </span>
+    </span>
+  </span>
+  <span class="row-end">
+    <%# 認領狀態（未領／已領）與找尋狀態（未找到／找到），兩個獨立維度 %>
+    <span class="badge badge--<%= item.claimStatus %>">
+      <span class="badge-dot"></span><%= meta.claimStatusLabel[item.claimStatus] %>
+    </span>
+    <span class="badge badge--<%= item.searchStatus %>">
+      <span class="badge-dot"></span><%= meta.searchStatusLabel[item.searchStatus] %>
+    </span>
+    <span class="badge badge--<%= item.status %> badge--flow">
+      <span class="badge-dot"></span><%= rowStatus %>
+    </span>
+  </span>
+</a>

@@ -1,0 +1,97 @@
+<%- include("../partials/header") %>
+
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">FOUND ITEMS EXPLORER</p>
+    <h1>Lost & found</h1>
+    <p>
+      <strong><%= total %></strong> matching records<% if (filters.scope === 'mine') { %> —
+      <strong><%= mineCount %></strong> under your name<% } %>
+    </p>
+  </div>
+  <div class="heading-actions">
+    <a class="btn" href="/items/new?type=lost">＋ Report a lost item</a>
+    <a class="btn btn--primary" href="/items/new?type=found">＋ Register a found item</a>
+  </div>
+</div>
+
+<form class="filters" method="get" action="/items" role="search">
+  <div class="filters-top">
+    <label class="search-field">
+      <span aria-hidden="true">⌕</span>
+      <input
+        type="search"
+        name="q"
+        value="<%= filters.q %>"
+        placeholder="Search by name, place or description…"
+        aria-label="Search items"
+      />
+    </label>
+
+    <select class="select" name="status" aria-label="StatusFilter">
+      <option value="all" <%= filters.status === 'all' ? 'selected' : '' %>>All statuses</option>
+      <option value="open" <%= filters.status === 'open' ? 'selected' : '' %>>Open</option>
+      <option value="claimed" <%= filters.status === 'claimed' ? 'selected' : '' %>>Claim pending</option>
+      <option value="closed" <%= filters.status === 'closed' ? 'selected' : '' %>>Closed</option>
+    </select>
+
+    <%# 認領狀態（未領／已領）：只篩選 claimStatus，其他條件會保留 %>
+    <select class="select" name="claimStatus" aria-label="Claim status filter">
+      <option value="all" <%= filters.claimStatus === 'all' ? 'selected' : '' %>>All claim statuses</option>
+      <% meta.claimStatuses.forEach((option) => { %>
+        <option value="<%= option.value %>" <%= filters.claimStatus === option.value ? 'selected' : '' %>><%= option.label %></option>
+      <% }) %>
+    </select>
+
+    <%# 找尋狀態（未找到／找到）：只篩選 searchStatus，可與上面兩個條件疊加 %>
+    <select class="select" name="searchStatus" aria-label="Search status filter">
+      <option value="all" <%= filters.searchStatus === 'all' ? 'selected' : '' %>>All search statuses</option>
+      <% meta.searchStatuses.forEach((option) => { %>
+        <option value="<%= option.value %>" <%= filters.searchStatus === option.value ? 'selected' : '' %>><%= option.label %></option>
+      <% }) %>
+    </select>
+
+    <button class="btn" type="submit">Filter</button>
+    <a class="btn btn--ghost" href="/items">Reset</a>
+  </div>
+
+  <div class="filters-bottom">
+    <a class="chip <%= filters.scope === 'mine' ? 'is-active' : '' %>" href="<%= links.scopeMine %>">My records</a>
+    <a class="chip <%= filters.scope === 'all' ? 'is-active' : '' %>" href="<%= links.scopeAll %>">All records</a>
+    <span class="filters-spacer"></span>
+    <a class="chip <%= filters.type === 'all' ? 'is-active' : '' %>" href="<%= links.typeAll %>">All types</a>
+    <a class="chip <%= filters.type === 'lost' ? 'is-active' : '' %>" href="<%= links.typeLost %>">Lost</a>
+    <a class="chip <%= filters.type === 'found' ? 'is-active' : '' %>" href="<%= links.typeFound %>">Found</a>
+  </div>
+</form>
+
+<section class="panel">
+  <div class="panel-head">
+    <div>
+      <h2><%= filters.scope === 'mine' ? 'My records' : 'All records' %></h2>
+      <small>Newest first</small>
+    </div>
+    <span class="mono"><%= total %> RECORDS</span>
+  </div>
+
+  <% if (items.length === 0) { %>
+    <div class="empty">
+      <strong>No records match</strong>
+      Try another keyword or status, or create the first record.
+      <div><a class="btn btn--primary btn--sm" href="/items/new?type=lost">Report a lost item</a></div>
+    </div>
+  <% } else { %>
+    <% items.forEach((item) => { %>
+      <%- include("../partials/item-row", { item, meta }) %>
+    <% }) %>
+  <% } %>
+
+  <% if (truncated) { %>
+    <div class="panel-foot">
+      <span>Showing the newest <%= items.length %> records — narrow it down with a keyword</span>
+      <span class="mono">LIMIT 100</span>
+    </div>
+  <% } %>
+</section>
+
+<%- include("../partials/footer") %>

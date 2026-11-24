@@ -1,0 +1,87 @@
+<%- include("partials/header") %>
+
+<section class="auth-shell">
+  <div class="auth-card">
+    <p class="eyebrow">CREATE ACCOUNT</p>
+    <h1>Create account</h1>
+    <p class="lead">You are signed in automatically. New accounts are Students; admin accounts come from the seed script.</p>
+
+    <% if (error) { %>
+      <div class="alert alert--error" role="alert"><%= error %></div>
+    <% } %>
+
+    <form class="form-grid" action="/register" method="post">
+      <div class="field">
+        <label for="name">Name</label>
+        <input
+          id="name"
+          type="text"
+          name="name"
+          value="<%= values.name %>"
+          autocomplete="name"
+          minlength="2"
+          maxlength="80"
+          placeholder="Your name"
+          required
+          autofocus
+        />
+      </div>
+
+      <div class="field">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          name="email"
+          value="<%= values.email %>"
+          autocomplete="username"
+          maxlength="254"
+          placeholder="student@campus.test"
+          required
+        />
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          name="password"
+          autocomplete="new-password"
+          minlength="12"
+          placeholder="At least 12 characters"
+          required
+        />
+        <span class="field-hint">At least 12 characters; hashed with bcrypt before storing.</span>
+      </div>
+
+      <div class="field">
+        <label for="confirmPassword">Confirm password</label>
+        <input
+          id="confirmPassword"
+          type="password"
+          name="confirmPassword"
+          autocomplete="new-password"
+          minlength="12"
+          placeholder="Type the password again"
+          required
+        />
+      </div>
+
+      <button class="btn btn--primary btn--block" type="submit">Create account</button>
+    </form>
+
+    <p class="auth-foot">Already have an account?<a href="/login">Back to sign in</a></p>
+  </div>
+
+  <aside class="auth-aside">
+    <p class="eyebrow">ACCOUNT SECURITY</p>
+    <h2>Account security</h2>
+    <p>
+      Passwords are stored as bcrypt hashes, never plain text. Signing in regenerates
+      the session ID, and sessions live in MongoDB.
+    </p>
+  </aside>
+</section>
+
+<%- include("partials/footer") %>

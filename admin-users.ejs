@@ -1,0 +1,63 @@
+<%- include("partials/header") %>
+
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">ADMIN ONLY</p>
+    <h1>User management</h1>
+    <p>
+      Only admins can open this page. Students are stopped by <code>requireAdmin</code>
+      with a 403.
+    </p>
+  </div>
+  <div class="heading-actions">
+    <a class="btn" href="/items?scope=all">Manage all records</a>
+    <a class="btn btn--primary" href="/">Back to overview</a>
+  </div>
+</div>
+
+<section class="panel">
+  <div class="panel-head">
+    <div>
+      <h2>All users</h2>
+      <small>Role changes and deactivation can be added here</small>
+    </div>
+    <span class="mono"><%= users.length %> USERS</span>
+  </div>
+
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Status</th>
+          <th>Created</th>
+          <th>Last sign-in</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% users.forEach((user) => { %>
+          <tr>
+            <td><strong><%= user.name %></strong></td>
+            <td class="mono"><%= user.email %></td>
+            <td>
+              <span class="badge <%= user.role === 'admin' ? 'badge--claimed' : '' %>">
+                <span class="badge-dot"></span><%= user.role %>
+              </span>
+            </td>
+            <td>
+              <span class="badge <%= user.isActive ? 'badge--closed' : 'badge--lost' %>">
+                <span class="badge-dot"></span><%= user.isActive ? 'Active' : 'Disabled' %>
+              </span>
+            </td>
+            <td class="subtle"><%= formatDate(user.createdAt) %></td>
+            <td class="subtle"><%= formatDate(user.lastLoginAt) %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<%- include("partials/footer") %>

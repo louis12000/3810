@@ -1,0 +1,123 @@
+<div class="field">
+  <label for="title">Item name *</label>
+  <input
+    id="title"
+    name="title"
+    type="text"
+    maxlength="120"
+    value="<%= values.title %>"
+    placeholder="e.g. Black umbrella, iPhone 15 case"
+    class="<%= errors.title ? 'input--error' : '' %>"
+  />
+  <% if (errors.title) { %><p class="field-error"><%= errors.title %></p><% } %>
+</div>
+
+<fieldset class="field">
+  <legend>Type *</legend>
+  <div class="radio-row">
+    <% meta.types.forEach((option) => { %>
+      <label class="radio-pill">
+        <input
+          type="radio"
+          name="type"
+          value="<%= option.value %>"
+          <%= values.type === option.value ? 'checked' : '' %>
+        />
+        <span><%= option.label %></span>
+      </label>
+    <% }) %>
+  </div>
+  <% if (errors.type) { %><p class="field-error"><%= errors.type %></p><% } %>
+</fieldset>
+
+<div class="two-col">
+  <div class="field">
+    <label for="category">Category</label>
+    <select id="category" name="category">
+      <% meta.categories.forEach((option) => { %>
+        <option
+          value="<%= option.value %>"
+          <%= values.category === option.value ? 'selected' : '' %>
+        ><%= option.label %></option>
+      <% }) %>
+    </select>
+    <% if (errors.category) { %><p class="field-error"><%= errors.category %></p><% } %>
+  </div>
+
+  <div class="field">
+    <label for="occurredAt">Lost / found date</label>
+    <input
+      id="occurredAt"
+      name="occurredAt"
+      type="date"
+      value="<%= values.occurredAt %>"
+      class="<%= errors.occurredAt ? 'input--error' : '' %>"
+    />
+    <% if (errors.occurredAt) { %><p class="field-error"><%= errors.occurredAt %></p><% } %>
+  </div>
+</div>
+
+<div class="field">
+  <label for="location">Location</label>
+  <input
+    id="location"
+    name="location"
+    type="text"
+    maxlength="120"
+    value="<%= values.location %>"
+    placeholder="e.g. Library, level 3 reading room"
+    class="<%= errors.location ? 'input--error' : '' %>"
+  />
+  <% if (errors.location) { %><p class="field-error"><%= errors.location %></p><% } %>
+</div>
+
+<fieldset class="field">
+  <legend>Claim status</legend>
+  <div class="radio-row">
+    <% meta.claimStatuses.forEach((option) => { %>
+      <label class="radio-pill">
+        <input
+          type="radio"
+          name="claimStatus"
+          value="<%= option.value %>"
+          <%= values.claimStatus === option.value ? 'checked' : '' %>
+        />
+        <span><%= option.label %></span>
+      </label>
+    <% }) %>
+  </div>
+  <span class="field-hint">Unclaimed = nobody has taken it yet; Claimed = it has been claimed / collected.</span>
+  <% if (errors.claimStatus) { %><p class="field-error"><%= errors.claimStatus %></p><% } %>
+</fieldset>
+
+<fieldset class="field">
+  <legend>Search status</legend>
+  <div class="radio-row">
+    <% meta.searchStatuses.forEach((option) => { %>
+      <label class="radio-pill">
+        <input
+          type="radio"
+          name="searchStatus"
+          value="<%= option.value %>"
+          <%= values.searchStatus === option.value ? 'checked' : '' %>
+        />
+        <span><%= option.label %></span>
+      </label>
+    <% }) %>
+  </div>
+  <span class="field-hint">Not found yet = still missing; Found = the item has been recovered.</span>
+  <% if (errors.searchStatus) { %><p class="field-error"><%= errors.searchStatus %></p><% } %>
+</fieldset>
+
+<div class="field">
+  <label for="description">Description</label>
+  <textarea
+    id="description"
+    name="description"
+    rows="5"
+    maxlength="1000"
+    placeholder="Colour, brand, marks, what is inside… the more specific the better."
+    class="<%= errors.description ? 'input--error' : '' %>"
+  ><%= values.description %></textarea>
+  <% if (errors.description) { %><p class="field-error"><%= errors.description %></p><% } %>
+</div>

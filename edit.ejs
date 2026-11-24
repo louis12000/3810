@@ -1,0 +1,56 @@
+<%- include("../partials/header") %>
+
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">UPDATE RECORD</p>
+    <h1>Edit record</h1>
+    <p>
+      Editing “<%= item.title %>”. Item fields, claim status and search status can be changed here;
+      the open / claimed / closed workflow still goes through the claim flow on the detail page.
+    </p>
+  </div>
+  <a class="btn" href="/items/<%= item._id %>">Cancel</a>
+</div>
+
+<section class="panel narrow">
+  <div class="panel-head">
+    <h2>Item details</h2>
+    <span class="mono">UPDATE</span>
+  </div>
+
+  <div class="panel-body">
+    <% if (Object.keys(errors).length > 0) { %>
+      <div class="alert alert--error">Some fields need fixing — see the notes below.</div>
+    <% } %>
+
+    <form class="form-grid" method="post" action="/items/<%= item._id %>" novalidate>
+      <%- include("_form", { values, errors, meta }) %>
+
+      <div class="form-actions">
+        <button class="btn btn--primary" type="submit">Save changes</button>
+        <a class="btn" href="/items/<%= item._id %>">Cancel</a>
+      </div>
+    </form>
+  </div>
+</section>
+
+<section class="panel narrow">
+  <div class="panel-head">
+    <h2>Delete this record</h2>
+    <span class="mono">IRREVERSIBLE</span>
+  </div>
+  <div class="panel-body">
+    <p class="muted">The record is removed from the database and nobody can see it again.</p>
+    <form
+      method="post"
+      action="/items/<%= item._id %>/delete"
+      data-confirm="Are you sure you want to delete this record? This cannot be undone."
+    >
+      <div class="form-actions">
+        <button class="btn btn--danger" type="submit">Delete record</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<%- include("../partials/footer") %>

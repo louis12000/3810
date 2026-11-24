@@ -1,0 +1,35 @@
+<%- include("../partials/header") %>
+
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">NEW RECORD</p>
+    <h1>New record</h1>
+    <p>The record appears under My records, and anyone signed in can see it and claim it.</p>
+  </div>
+  <a class="btn" href="/items">Cancel</a>
+</div>
+
+<section class="panel narrow">
+  <div class="panel-head">
+    <h2>Item details</h2>
+    <span class="mono">CREATE</span>
+  </div>
+
+  <div class="panel-body">
+    <% if (Object.keys(errors).length > 0) { %>
+      <div class="alert alert--error">Some fields need fixing — see the notes below.</div>
+    <% } %>
+
+    <%# novalidate: let the server validate so the backend check is visible %>
+    <form class="form-grid" method="post" action="/items" novalidate>
+      <%- include("_form", { values, errors, meta }) %>
+
+      <div class="form-actions">
+        <button class="btn btn--primary" type="submit">New record</button>
+        <a class="btn" href="/items">Cancel</a>
+      </div>
+    </form>
+  </div>
+</section>
+
+<%- include("../partials/footer") %>

@@ -1,0 +1,106 @@
+<%- include("partials/header") %>
+
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">CAMPUS LOST &amp; FOUND</p>
+    <h1>Every lost thing leaves a trace.</h1>
+    <p>From where it was found to where it is kept — reconnect your campus day.</p>
+  </div>
+  <div class="heading-actions">
+    <a class="btn" href="/items/new?type=lost">I lost something</a>
+    <a class="btn btn--primary" href="/items/new?type=found">＋ Register a found item</a>
+  </div>
+</div>
+
+<div class="stats">
+  <%# 統計卡片直接連到帶新狀態參數的列表頁，示範 claimStatus / searchStatus 這兩種Filter %>
+  <a class="stat" href="/items?type=found&amp;claimStatus=unclaimed">
+    <span class="stat-label">Unclaimed found items</span>
+    <span class="stat-number accent"><%= String(stats.unclaimedFound).padStart(2, '0') %><small>items</small></span>
+    <span class="stat-foot">Waiting to be reunited</span>
+  </a>
+  <a class="stat" href="/items?claimStatus=claimed">
+    <span class="stat-label">Claimed</span>
+    <span class="stat-number"><%= String(stats.claimedTotal).padStart(2, '0') %><small>items</small></span>
+    <span class="stat-foot">Claim status: claimed</span>
+  </a>
+  <a class="stat" href="/items?searchStatus=found">
+    <span class="stat-label">Recovered</span>
+    <span class="stat-number"><%= String(stats.recovered).padStart(2, '0') %><small>items</small></span>
+    <span class="stat-foot">Search status: found</span>
+  </a>
+  <a class="stat" href="/me">
+    <span class="stat-label">My unclaimed records</span>
+    <span class="stat-number"><%= String(stats.myUnclaimed).padStart(2, '0') %><small>items</small></span>
+    <span class="stat-foot">Still waiting for news</span>
+  </a>
+</div>
+
+<section class="panel">
+  <div class="panel-head">
+    <div>
+      <h2>Latest found items</h2>
+      <small>Every find is the start of a recovery</small>
+    </div>
+    <span class="mono">LIVE FEED</span>
+  </div>
+
+  <% if (recent.length === 0) { %>
+    <div class="empty">
+      <strong>No found items yet</strong>
+      The first record might be exactly what someone is looking for.
+      <div><a class="btn btn--primary btn--sm" href="/items/new?type=found">Register a found item</a></div>
+    </div>
+  <% } else { %>
+    <% recent.forEach((item) => { %>
+      <%- include("partials/item-row", { item, meta }) %>
+    <% }) %>
+  <% } %>
+
+  <div class="panel-foot">
+    <span><%= stats.totalFound %> found records in total</span>
+    <a class="mono" href="/items">See all records →</a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">WAITING TO BE RECONNECTED</p>
+      <h2>Recently found items</h2>
+    </div>
+    <a class="mono" href="/items?type=found&amp;claimStatus=unclaimed">All unclaimed →</a>
+  </div>
+
+  <% if (available.length === 0) { %>
+    <div class="empty">
+      <strong>Nothing waiting to be claimed</strong>
+      Every found item has its owner.
+    </div>
+  <% } else { %>
+    <div class="cards">
+      <% available.forEach((item) => { %>
+        <a class="item-card" href="/items/<%= item._id %>">
+          <div class="card-art card-art--<%= item.type %>">
+            <span class="badge badge--<%= item.claimStatus %>">
+              <span class="badge-dot"></span><%= meta.claimStatusLabel[item.claimStatus] %>
+            </span>
+            <span class="thumb thumb--<%= item.type %>"><%= item.type === 'lost' ? 'LS' : 'LF' %></span>
+            <span class="mono"><%= String(item._id).slice(-6).toUpperCase() %></span>
+          </div>
+          <div class="card-info">
+            <div class="card-cat"><%= meta.categoryLabel[item.category] %></div>
+            <h3><%= item.title %></h3>
+            <div class="row-meta">◈ <%= item.location || 'No location' %></div>
+            <div class="card-foot">
+              <span><%= formatDay(item.occurredAt) %></span>
+              <span class="accent">View →</span>
+            </div>
+          </div>
+        </a>
+      <% }) %>
+    </div>
+  <% } %>
+</section>
+
+<%- include("partials/footer") %>

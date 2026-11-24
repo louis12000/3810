@@ -1,0 +1,68 @@
+<%- include("partials/header") %>
+
+<section class="auth-shell">
+  <div class="auth-card">
+    <p class="eyebrow">WELCOME BACK</p>
+    <h1>Sign in</h1>
+    <p class="lead">Sign in to report items, browse found items and claim records.</p>
+
+    <% if (notice) { %>
+      <div class="alert alert--success" role="status"><%= notice %></div>
+    <% } %>
+
+    <% if (error) { %>
+      <div class="alert alert--error" role="alert"><%= error %></div>
+    <% } %>
+
+    <form class="form-grid" action="/login" method="post">
+      <input type="hidden" name="next" value="<%= next %>" />
+
+      <div class="field">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          name="email"
+          value="<%= email %>"
+          autocomplete="username"
+          placeholder="student@campus.test"
+          maxlength="254"
+          required
+          autofocus
+        />
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          name="password"
+          autocomplete="current-password"
+          placeholder="Enter your password"
+          required
+        />
+      </div>
+
+      <button class="btn btn--primary btn--block" type="submit">Sign in</button>
+    </form>
+
+    <p class="auth-foot">No account yet?<a href="/register">Create one</a></p>
+  </div>
+
+  <aside class="auth-aside">
+    <p class="eyebrow">RE:FOUND · CAMPUS LOST &amp; FOUND</p>
+    <h2>Every lost thing leaves a trace.</h2>
+    <p>
+      A server-side app that lets students report lost items, browse found items and hand things back through a claim flow.
+    </p>
+
+    <div class="demo-accounts">
+      <span class="mono subtle">DEMO ACCOUNTS</span>
+      <span>Student　<b>student@campus.test</b>　Student@3810Demo</span>
+      <span>Admin　<b>admin@campus.test</b>　Admin@3810Demo</span>
+    </div>
+  </aside>
+</section>
+
+<%- include("partials/footer") %>

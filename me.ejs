@@ -1,0 +1,93 @@
+<%- include("partials/header") %>
+
+<%
+  const tabMeta = {
+    found: { title: 'Found by me', hint: 'Found items I registered, waiting for their owner', empty: 'You have not registered any found item' },
+    lost: { title: 'Lost by me', hint: 'Lost items I reported', empty: 'You have not reported any lost item' },
+    claims: { title: 'My claims', hint: 'Claims I filed on records owned by others', empty: 'You have not filed any claim' },
+  };
+  const current = tabMeta[tab];
+%>
+
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">MY LOST &amp; FOUND ARCHIVE</p>
+    <h1>My records</h1>
+    <p>Track what I found, what I am looking for, and my claims.</p>
+  </div>
+  <div class="heading-actions">
+    <a class="btn" href="/items/new?type=lost">I lost something</a>
+    <a class="btn btn--primary" href="/items/new?type=found">＋ Register a found item</a>
+  </div>
+</div>
+
+<div class="me-layout">
+  <aside class="panel">
+    <div class="profile">
+      <div class="avatar"><%= currentUser.name.slice(0, 1) %></div>
+      <strong><%= currentUser.name %></strong>
+      <p><%= currentUser.role === 'admin' ? 'Admin · campus service' : 'Student · personal workspace' %></p>
+      <div class="profile-tag">◈ <%= currentUser.email %></div>
+    </div>
+
+    <nav class="me-nav" aria-label="Record categories">
+      <a class="<%= tab === 'found' ? 'is-active' : '' %>" href="/me?tab=found">
+        Found by me<span class="mono"><%= String(counts.found).padStart(2, '0') %></span>
+      </a>
+      <a class="<%= tab === 'lost' ? 'is-active' : '' %>" href="/me?tab=lost">
+        Lost by me<span class="mono"><%= String(counts.lost).padStart(2, '0') %></span>
+      </a>
+      <a class="<%= tab === 'claims' ? 'is-active' : '' %>" href="/me?tab=claims">
+        My claims<span class="mono"><%= String(counts.claims).padStart(2, '0') %></span>
+      </a>
+    </nav>
+
+    <div class="me-note">Everything in one place.<br />Status changes are written to MongoDB immediately.</div>
+  </aside>
+
+  <div>
+    <div class="summary">
+      <div class="summary-card">
+        <span>Items I found</span>
+        <strong class="accent"><%= String(counts.found).padStart(2, '0') %></strong>
+      </div>
+      <div class="summary-card">
+        <span>Still missing</span>
+        <strong><%= String(counts.unfoundLost).padStart(2, '0') %></strong>
+      </div>
+      <div class="summary-card">
+        <span>Open claims</span>
+        <strong><%= String(counts.claims).padStart(2, '0') %></strong>
+      </div>
+    </div>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2><%= current.title %></h2>
+          <small><%= current.hint %></small>
+        </div>
+        <span class="mono"><%= list.length %> ITEMS</span>
+      </div>
+
+      <% if (list.length === 0) { %>
+        <div class="empty">
+          <strong><%= current.empty %></strong>
+          Create a record so it can find its way home.
+          <div><a class="btn btn--primary btn--sm" href="/items/new?type=found">Register a found item</a></div>
+        </div>
+      <% } else { %>
+        <% list.forEach((item) => { %>
+          <%- include("partials/item-row", { item, meta, showOwner: tab === 'claims' }) %>
+        <% }) %>
+      <% } %>
+
+      <div class="panel-foot">
+        <span>Sorted by newest</span>
+        <span class="mono">MONGODB</span>
+      </div>
+    </section>
+  </div>
+</div>
+
+<%- include("partials/footer") %>

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><%= title %> · RE:FOUND</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="topbar-inner">
+        <a class="brand" href="/">
+          <span class="brand-mark" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <path d="M4 9V6a2 2 0 0 1 2-2h3M20 9V6a2 2 0 0 0-2-2h-3M4 15v3a2 2 0 0 0 2 2h3M20 15v3a2 2 0 0 1-2 2h-3M9 12h6" />
+            </svg>
+          </span>
+          <span>
+            <span class="brand-name">RE:FOUND <b>·</b></span>
+            <small>Campus lost & found</small>
+          </span>
+        </a>
+
+        <% if (currentUser) { %>
+          <nav class="nav" aria-label="Main navigation">
+            <a class="nav-link <%= currentPath === '/' ? 'is-active' : '' %>" href="/">Overview</a>
+            <a class="nav-link <%= currentPath.startsWith('/items') ? 'is-active' : '' %>" href="/items">Lost & found</a>
+            <a class="nav-link <%= currentPath.startsWith('/me') ? 'is-active' : '' %>" href="/me">My records</a>
+            <% if (currentUser.role === 'admin') { %>
+              <a class="nav-link <%= currentPath.startsWith('/admin') ? 'is-active' : '' %>" href="/admin/users">Admin</a>
+            <% } %>
+          </nav>
+        <% } %>
+
+        <div class="header-right">
+          <% if (currentUser) { %>
+            <div class="account">
+              <span class="avatar"><%= currentUser.name.slice(0, 1) %></span>
+              <div>
+                <strong><%= currentUser.name %></strong>
+                <small><%= currentUser.role === 'admin' ? 'Admin' : 'Student' %></small>
+              </div>
+            </div>
+            <form action="/logout" method="post" class="inline-form">
+              <button class="btn btn--sm btn--ghost" type="submit">Sign out</button>
+            </form>
+          <% } else { %>
+            <a class="btn btn--sm" href="/login">Sign in</a>
+            <a class="btn btn--sm btn--primary" href="/register">Create account</a>
+          <% } %>
+        </div>
+      </div>
+    </header>
+
+    <main class="main">
+      <% if (flash) { %>
+        <div class="flash flash--<%= flash.type %>" role="status"><%= flash.message %></div>
+      <% } %>
